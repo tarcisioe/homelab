@@ -55,7 +55,7 @@ function run-ansible {
     [[ -d "${tf_generated}" ]] ||
         die "No 'tf-generated' directory found. Run terraform first."
 
-    ansible-playbook -i "${tf_generated}/ansible-services-inventory.ini" "${playbook}"
+    ansible-playbook -i "${tf_generated}/ansible-services-inventory.ini" "${playbook}" "${@}"
 }
 
 
@@ -81,7 +81,7 @@ function run-command {
         terraform)
             terraform-apply "${quiet_flag}" ;;
         ansible)
-            run-ansible ;;
+            run-ansible "${@:3}" ;;
         destroy)
             terraform-destroy "${quiet_flag}" ;;
         full)
@@ -118,8 +118,9 @@ function main {
     done
 
     local command="${1}"
+    shift
 
-    run-command "${quiet_flag}" "${command}"
+    run-command "${quiet_flag}" "${command}" "${@}"
 }
 
 
