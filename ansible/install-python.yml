@@ -1,10 +1,14 @@
-- name: Install Python
-  hosts: service_containers
-  remote_user: root
+- name: "Install Python"
+  hosts: "service_containers"
+  remote_user: "root"
   gather_facts: false
 
   tasks:
-  - name: Install Python
+  - name: "Install Python interpreter"
     ansible.builtin.script:
-      cmd: ./scripts/install-python.sh
-      creates: /usr/bin/python
+      cmd: "./scripts/install-python.sh"
+      creates: "/usr/bin/python"
+
+  - name: "Install Python packaging tools"
+    community.general.apk:
+      name: "py3-pip,py3-wheel"

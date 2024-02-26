@@ -24,6 +24,8 @@ resource "proxmox_lxc" "service_container" {
     memory = var.specs.memory
     swap = var.specs.swap
 
+    vmid = var.specs.vmid
+
     features {
         nesting = true
     }

@@ -1,0 +1,16 @@
+- name: "Configure pihole lxc.cap.drop"
+  hosts: "proxmox"
+  remote_user: "root"
+
+  tasks:
+    - name: "Edit pihole lxc configuration"
+      ansible.builtin.lineinfile:
+        path: "/etc/pve/lxc/10053.conf"
+        line: "lxc.cap.drop:"
+        regexp: "lxc\\.cap\\.drop:"
+        state: "present"
+      register: "pihole_lxc_config"
+
+    - name: "Restart pihole lxc container"
+      ansible.builtin.raw: "pct reboot 10053"
+      when: "pihole_lxc_config.changed"

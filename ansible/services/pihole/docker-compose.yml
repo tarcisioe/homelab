@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    network_mode: host
+
+    environment:
+      TZ: 'America/Sao_Paulo'
+      WEBPASSWORD_FILE: "/run/secrets/webpassword"
+
+    volumes:
+      - '/mnt/data/pihole/etc-pihole:/etc/pihole'
+      - '/mnt/data/pihole/dnsmasq.d:/etc/dnsmasq.d'
+
+    cap_add:
+      - NET_ADMIN
+
+    restart: unless-stopped
+
+    secrets:
+      - webpassword
+
+secrets:
+  webpassword:
+    file: "/private/webpassword"

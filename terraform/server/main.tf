@@ -42,10 +42,11 @@ locals {
         memory = 2048
         disk_size = "1G"
         swap = 0
+        vmid = 0
     }
 
     services = [
-        { name = "pihole", specs = {}, network: { dns = "1.1.1.1" } },
+        { name = "pihole", specs = { vmid = 10053 }, network = { dns = "1.1.1.1" } },
     ]
 }
 
@@ -56,7 +57,7 @@ module "service_containers" {
     node = var.proxmox.node
     container = {
         hostname = local.services[count.index].name,
-        ip = "${split("/", cidrhost(var.network.services_subnet, count.index))[0]}/${local.mask_size}"
+        ip = "${split("/", cidrhost(var.network.services_subnet, count.index + 1))[0]}/${local.mask_size}"
     }
     specs = merge(local.default_specs, local.services[count.index].specs)
     secrets = local.default_secrets
@@ -71,16 +72,29 @@ resource "local_file" "pihole_server_hosts" {
             domain = var.network.domain
         }
     )
-    filename = "../../tf-generated/pihole-server-hosts"
+    filename = "../../tf-generated/service-hosts"
 }
 
 
 resource "local_file" "service_inventory" {
     content = templatefile(
-        "templates/inventory.tftpl",
+        "templates/ansible-inventory.tftpl",
         {
             services = module.service_containers.*
+            proxmox = var.proxmox
         }
     )
-    filename = "../../tf-generated/services-inventory.ini"
+    filename = "../../tf-generated/ansible-services-inventory.ini"
+}
+
+
+resource "local_file" "pihole_setupVars" {
+    content = templatefile(
+        "templates/pihole-setupVars.conf.tftpl",
+        {
+            dhcp = var.dhcp
+            network = var.network
+        }
+    )
+    filename = "../../tf-generated/pihole-setupVars.conf"
 }

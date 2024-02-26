@@ -1,0 +1,46 @@
+- name: "Configure pihole"
+  hosts: "pihole"
+  remote_user: "root"
+
+  vars:
+    dnsmasq_config_dir: "/mnt/data/pihole/dnsmasq.d"
+    pihole_config_dir: "/mnt/data/pihole/etc-pihole"
+    pihole_custom_hosts_dir: "{{ pihole_config_dir }}/custom_hosts"
+
+  tasks:
+    - name: "Ensure conf dir exists"
+      file:
+        path: "{{ pihole_custom_hosts_dir }}"
+        state: "directory"
+
+    - name: "Copy dhcp assignments"
+      ansible.builtin.copy:
+        src: "../private/dhcp-assignments"
+        dest: "{{ dnsmasq_config_dir }}/04-pihole-static-dhcp.conf"
+      register: "dhcp_assignments"
+
+    - name: "Copy setupVars.conf"
+      ansible.builtin.copy:
+        src: "../tf-generated/pihole-setupVars.conf"
+        dest: "{{ pihole_config_dir }}/setupVars.conf"
+      register: "setupVars"
+
+    - name: "Copy generated hosts"
+      ansible.builtin.copy:
+        src: "../tf-generated/service-hosts"
+        dest: "{{ pihole_custom_hosts_dir }}/01-service-hosts"
+
+    - name: "Copy home hosts"
+      ansible.builtin.copy:
+        src: "../private/static-hosts"
+        dest: "{{ pihole_custom_hosts_dir }}/02-static-hosts"
+
+    - name: "Merge files into a single custom.list"
+      ansible.builtin.assemble:
+        src: "{{ pihole_custom_hosts_dir }}"
+        dest: "{{ pihole_config_dir }}/custom.list"
+      register: "custom_list"
+
+    - name: "Redeploy service."
+      include_tasks: "redeploy-service.yml"
+      when: "dhcp_assignments.changed or setupVars.changed or custom_list.changed"

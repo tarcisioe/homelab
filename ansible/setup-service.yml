@@ -1,5 +1,0 @@
-- name: Install Python
-  ansible.builtin.import_playbook: install-python.yml
-
-- name: Install Docker
-  ansible.builtin.import_playbook: install-docker.yml

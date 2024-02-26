@@ -26,3 +26,11 @@ variable "network" {
         domain = string,
     })
 }
+
+variable "dhcp" {
+    type = object({
+        start = string,
+        end = string,
+        router = string,
+    })
+}

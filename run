@@ -50,12 +50,12 @@ function run-terraform {
 
 function run-ansible {
     local tf_generated="${BASE_DIR}/tf-generated"
-    local playbook="${BASE_DIR}/ansible/setup-service.yml"
+    local playbook="${BASE_DIR}/ansible/setup-services.yml"
 
     [[ -d "${tf_generated}" ]] ||
         die "No 'tf-generated' directory found. Run terraform first."
 
-    ansible-playbook -i "${tf_generated}/services-inventory.ini" "${playbook}"
+    ansible-playbook -i "${tf_generated}/ansible-services-inventory.ini" "${playbook}"
 }
 
 
@@ -95,8 +95,7 @@ function run-command {
 }
 
 function main {
-    export ANSIBLE_HOST_KEY_CHECKING=False
-    export ANSIBLE_SSH_RETRIES=10
+    source "${BASE_DIR}/private/environment"
 
     local options
     options=$(getopt -o hy -l help,yes -- "${@}")
