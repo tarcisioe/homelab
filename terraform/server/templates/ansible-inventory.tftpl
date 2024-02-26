@@ -2,6 +2,9 @@
 [proxmox]
 ${ proxmox.node } ansible_host=${ proxmox.ip }
 
+[dns]
+${ dns.container.hostname } ansible_host=${ dns.container.ip }
+
 [service_containers]
 %{ for service in services ~}
 ${ service.container.hostname } ansible_host=${ service.container.ip }

@@ -45,9 +45,12 @@ locals {
         vmid = 0
     }
 
-    services = [
-        { name = "pihole", specs = { vmid = 10053 }, network = { dns = "1.1.1.1" } },
+    dns = { hostname = "pihole", specs = { vmid = 10053 }, network = { dns = "1.1.1.1" } }
+
+    other_services = [
     ]
+
+    services = concat([local.dns], local.other_services)
 }
 
 module "service_containers" {
@@ -56,7 +59,7 @@ module "service_containers" {
 
     node = var.proxmox.node
     container = {
-        hostname = local.services[count.index].name,
+        hostname = local.services[count.index].hostname,
         ip = "${split("/", cidrhost(var.network.services_subnet, count.index + 1))[0]}/${local.mask_size}"
     }
     specs = merge(local.default_specs, local.services[count.index].specs)
@@ -80,8 +83,15 @@ resource "local_file" "service_inventory" {
     content = templatefile(
         "templates/ansible-inventory.tftpl",
         {
-            services = module.service_containers.*
+            services = [
+                for sc in module.service_containers.*:
+                sc if sc.container.hostname != local.dns.hostname
+            ]
             proxmox = var.proxmox
+            dns = [
+                for sc in module.service_containers.*:
+                sc if sc.container.hostname == local.dns.hostname
+            ][0]
         }
     )
     filename = "../../tf-generated/ansible-services-inventory.ini"
