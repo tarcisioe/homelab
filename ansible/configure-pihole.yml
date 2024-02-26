@@ -19,10 +19,24 @@
         dest: "{{ dnsmasq_config_dir }}/04-pihole-static-dhcp.conf"
       register: "dhcp_assignments"
 
-    - name: "Copy setupVars.conf"
+    - name: "Ensure setupVars.conf is properly included."
+      ansible.builtin.blockinfile:
+        block: "{{ lookup('ansible.builtin.file', '../tf-generated/pihole-setupVars.conf') }}"
+        path: "{{ pihole_config_dir }}/setupVars.conf"
+      register: "setupVars_would_be"
+      check_mode: "yes"
+
+    - name: "Zero setupVars.conf"
       ansible.builtin.copy:
-        src: "../tf-generated/pihole-setupVars.conf"
         dest: "{{ pihole_config_dir }}/setupVars.conf"
+        content: ""
+      when: "setupVars_would_be.changed"
+
+    - name: "Ensure the basic setupVars.conf block is included"
+      ansible.builtin.blockinfile:
+        block: "{{ lookup('ansible.builtin.file', '../tf-generated/pihole-setupVars.conf') }}"
+        path: "{{ pihole_config_dir }}/setupVars.conf"
+      when: "setupVars_would_be.changed"
       register: "setupVars"
 
     - name: "Copy generated hosts"
