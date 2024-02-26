@@ -1,0 +1,10 @@
+- name: Install Python
+  hosts: service_containers
+  remote_user: root
+  gather_facts: false
+
+  tasks:
+  - name: Install Python
+    ansible.builtin.script:
+      cmd: ./scripts/install-python.sh
+      creates: /usr/bin/python
