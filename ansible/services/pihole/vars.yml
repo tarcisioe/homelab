@@ -1,0 +1,3 @@
+dnsmasq_config_dir: "/mnt/data/pihole/dnsmasq.d"
+pihole_config_dir: "/mnt/data/pihole/etc-pihole"
+pihole_custom_hosts_dir: "{{ pihole_config_dir }}/custom_hosts"

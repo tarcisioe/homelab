@@ -1,0 +1,11 @@
+- name: "Configure proxmox host"
+  import_playbook: "configure-pihole-cap.yml"
+
+- name: "Deploy pihole"
+  hosts: "dns"
+  gather_facts: false
+  remote_user: "root"
+
+  tasks:
+    - include_tasks: "setup-container.yml"
+    - include_tasks: "deploy-service.yml"

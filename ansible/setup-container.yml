@@ -1,0 +1,33 @@
+- name: "Install Python interpreter"
+  ansible.builtin.script:
+    cmd: "./scripts/install-python.sh"
+    creates: "/usr/bin/python"
+
+- name: "Gather facts"
+  setup:
+
+- name: "Upgrade Alpine packages"
+  community.general.apk:
+    upgrade: true
+    update_cache: true
+
+- name: "Install Python packaging tools"
+  community.general.apk:
+    name: "py3-pip,py3-wheel"
+
+- name: "Install Docker and Docker Compose"
+  community.general.apk:
+    name: "docker"
+
+- name: "Enable and start Docker service"
+  ansible.builtin.service:
+    name: "docker"
+    enabled: true
+    state: "started"
+
+- name: "Install Docker Python module"
+  pip:
+    name:
+      - "docker<7.0.0"
+      - "docker-compose"
+    extra_args: "--no-build-isolation"
