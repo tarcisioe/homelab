@@ -94,8 +94,13 @@ function run-command {
     esac
 }
 
+function source-if-exists {
+    local file="${1}"
+    [[ -f "${file}" ]] && source "${file}"
+}
+
 function main {
-    source "${BASE_DIR}/private/environment"
+    source-if-exists "${BASE_DIR}/private/environment"
 
     local options
     options=$(getopt -o hy -l help,yes -- "${@}")
