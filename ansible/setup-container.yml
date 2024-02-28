@@ -4,7 +4,7 @@
     creates: "/usr/bin/python"
 
 - name: "Gather facts"
-  setup:
+  ansible.builtin.gather_facts:
 
 - name: "Upgrade Alpine packages"
   community.general.apk:
@@ -26,7 +26,7 @@
     state: "started"
 
 - name: "Install Docker Python module"
-  pip:
+  ansible.builtin.pip:
     name:
       - "docker<7.0.0"
       - "docker-compose"

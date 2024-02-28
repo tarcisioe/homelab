@@ -1,3 +1,15 @@
-dnsmasq_config_dir: "/mnt/data/pihole/dnsmasq.d"
-pihole_config_dir: "/mnt/data/pihole/etc-pihole"
+# local paths
+pihole_private_dir: "{{ private_dir }}/pihole"
+webpassword_file: "{{ pihole_private_dir }}/webpassword"
+static_hosts_file: "{{ pihole_private_dir }}/static-hosts"
+dhcp_assignments_file: "{{ pihole_private_dir }}/dhcp-assignments"
+pihole_tf_generated_dir: "{{ tf_generated_dir }}/pihole"
+setupVars_file: "{{ pihole_tf_generated_dir }}/setupVars.conf"
+service_hosts_file: "{{ pihole_tf_generated_dir }}/service-hosts"
+
+# remote paths
+pihole_data_dir: "{{ services_data_dir }}/pihole"
+dnsmasq_config_dir: "{{ pihole_data_dir }}/etc/dnsmasq.d"
+pihole_config_dir: "{{ pihole_data_dir }}/etc/pihole"
 pihole_custom_hosts_dir: "{{ pihole_config_dir }}/custom_hosts"
+webpassword_remote_file: "{{ compose_dir }}/webpassword"

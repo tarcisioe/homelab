@@ -3,43 +3,42 @@
 
 - name: "Ensure conf dir exists"
   file:
-    path: "{{ pihole_custom_hosts_dir }}"
+    path: "{{ item }}"
     state: "directory"
+  loop:
+    - "{{ pihole_data_dir }}"
+    - "{{ pihole_data_dir }}/etc"
+    - "{{ dnsmasq_config_dir }}"
+    - "{{ pihole_config_dir }}"
+    - "{{ pihole_custom_hosts_dir }}"
+
+- name: "Copy webpassword"
+  ansible.builtin.copy:
+    src: "{{ webpassword_file }}"
+    dest: "{{ webpassword_remote_file }}"
+  register: "webpassword"
 
 - name: "Copy dhcp assignments"
   ansible.builtin.copy:
-    src: "../private/dhcp-assignments"
+    src: "{{ dhcp_assignments_file }}"
     dest: "{{ dnsmasq_config_dir }}/04-pihole-static-dhcp.conf"
   register: "dhcp_assignments"
 
-- name: "Ensure setupVars.conf is properly included."
+- name: "Ensure setupVars.conf is properly included"
   ansible.builtin.blockinfile:
-    block: "{{ lookup('ansible.builtin.file', '../tf-generated/pihole-setupVars.conf') }}"
+    block: "{{ lookup('ansible.builtin.file', '{{ setupVars_file }}') }}"
     path: "{{ pihole_config_dir }}/setupVars.conf"
-  register: "setupVars_would_be"
-  check_mode: "yes"
-
-- name: "Zero setupVars.conf"
-  ansible.builtin.copy:
-    dest: "{{ pihole_config_dir }}/setupVars.conf"
-    content: ""
-  when: "setupVars_would_be.changed"
-
-- name: "Ensure the basic setupVars.conf block is included"
-  ansible.builtin.blockinfile:
-    block: "{{ lookup('ansible.builtin.file', '../tf-generated/pihole-setupVars.conf') }}"
-    path: "{{ pihole_config_dir }}/setupVars.conf"
-  when: "setupVars_would_be.changed"
+    create: true
   register: "setupVars"
 
-- name: "Copy generated hosts"
+- name: "Copy service hosts"
   ansible.builtin.copy:
-    src: "../tf-generated/service-hosts"
+    src: "{{ service_hosts_file }}"
     dest: "{{ pihole_custom_hosts_dir }}/01-service-hosts"
 
-- name: "Copy home hosts"
+- name: "Copy static hosts"
   ansible.builtin.copy:
-    src: "../private/static-hosts"
+    src: "{{ static_hosts_file }}"
     dest: "{{ pihole_custom_hosts_dir }}/02-static-hosts"
 
 - name: "Merge files into a single custom.list"
@@ -48,7 +47,7 @@
     dest: "{{ pihole_config_dir }}/custom.list"
   register: "custom_list"
 
-- name: "Redeploy service."
+- name: "Set service to be redeployed"
   ansible.builtin.set_fact:
     restart_docker: true
-  when: "dhcp_assignments.changed or setupVars.changed or custom_list.changed"
+  when: "webpassword.changed or  dhcp_assignments.changed or setupVars.changed or custom_list.changed"

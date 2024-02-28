@@ -75,7 +75,7 @@ resource "local_file" "pihole_server_hosts" {
             domain = var.network.domain
         }
     )
-    filename = "../../tf-generated/service-hosts"
+    filename = "../../tf-generated/pihole/service-hosts"
 }
 
 
@@ -106,5 +106,5 @@ resource "local_file" "pihole_setupVars" {
             network = var.network
         }
     )
-    filename = "../../tf-generated/pihole-setupVars.conf"
+    filename = "../../tf-generated/pihole/setupVars.conf"
 }

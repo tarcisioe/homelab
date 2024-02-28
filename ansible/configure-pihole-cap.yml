@@ -13,7 +13,7 @@
       changed_when: false
 
     - name: "Edit pihole lxc configuration"
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: "{{ lxc_config_path }}"
         line: "lxc.cap.drop:"
       register: "pihole_lxc_config"
