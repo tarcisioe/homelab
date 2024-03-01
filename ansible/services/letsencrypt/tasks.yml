@@ -1,0 +1,31 @@
+- name: "Import custom vars"
+  ansible.builtin.include_vars: "vars.yml"
+
+- name: "Ensure conf dir exists"
+  file:
+    path: "{{ letsencrypt_conf_dir }}"
+    state: "directory"
+
+- name: "Copy certbot.ini"
+  ansible.builtin.copy:
+    src: "{{ certbot_ini_file }}"
+    dest: "{{ letsencrypt_conf_dir }}"
+  register: "certbot_ini"
+
+- name: "Copy dns-multi.ini"
+  ansible.builtin.copy:
+    src: "{{ dns_multi_ini_file }}"
+    dest: "{{ letsencrypt_conf_dir }}"
+  register: "dns_multi_ini"
+
+- name: "Configure update_certificate.sh"
+  ansible.builtin.template:
+    src: "{{ update_certificate_file }}"
+    dest: "{{ compose_dir }}"
+    mode: 0744
+  register: "update_certificate_sh"
+
+- name: "Set service to be redeployed"
+  ansible.builtin.set_fact:
+    restart_docker: true
+  when: "certbot_ini.changed or dns_multi_ini.changed or update_certificate_sh.changed"

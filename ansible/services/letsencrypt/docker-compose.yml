@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  letsencrypt:
+    container_name: "letsencrypt"
+    image: "ghcr.io/alexzorin/certbot-dns-multi"
+    network_mode: host
+
+    volumes:
+      - "${PWD}/update_certificate.sh:/root/update_certificate.sh"
+      - "${SERVICE_DIR}/etc/letsencrypt:/etc/letsencrypt"
+
+    entrypoint: ["/bin/bash", "-c"]
+    command: "/root/update_certificate.sh"
+
+    restart: "unless-stopped"
