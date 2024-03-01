@@ -92,6 +92,7 @@ resource "local_file" "service_inventory" {
                 for sc in module.service_containers.*:
                 sc if sc.container.hostname == local.dns.hostname
             ][0]
+            network = var.network
         }
     )
     filename = "../../tf-generated/ansible-services-inventory.ini"

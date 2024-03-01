@@ -50,7 +50,7 @@ function run-terraform {
 
 function run-ansible {
     local tf_generated="${BASE_DIR}/tf-generated"
-    local playbook="${BASE_DIR}/ansible/deploy-homelab.yml"
+    local playbook="${BASE_DIR}/ansible/main.yml"
 
     [[ -d "${tf_generated}" ]] ||
         die "No 'tf-generated' directory found. Run terraform first."

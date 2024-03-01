@@ -35,6 +35,7 @@
         remove_orphans: true
         state: "present"
   environment:
+    PWD: "{{ compose_dir }}"
     SERVICE_DIR: "{{ services_data_dir }}/{{ ansible_hostname }}"
 
 - name: "Prune Docker data"

@@ -1,0 +1,26 @@
+- block:
+    - name: "Check if lcx.cap.drop configuration is already in file"
+      ansible.builtin.command: "grep '{{ lxc_cap_drop_regexp }}' {{ lxc_config_path }}"
+      register: "lxc_cap_drop_grep"
+      failed_when: "lxc_cap_drop_grep.rc >= 2"
+      changed_when: false
+
+    - name: "Add capability drops to container."
+      ansible.builtin.lineinfile:
+        path: "{{ lxc_config_path }}"
+        line: "{{ lxc_cap_drop_str }}"
+      register: "lxc_config"
+      when: "lxc_cap_drop_grep.rc != 0"
+
+    - name: "Ensure capability drops are cleared previously to dropping others."
+      ansible.builtin.lineinfile:
+        regexp: "{{ lxc_cap_drop_bare_regexp }}"
+        path: "{{ lxc_config_path }}"
+        # Proxmox inserts a space after the line so we leave it for idempotency
+        line: "lxc.cap.drop: "
+        insertbefore: "{{ lxc_cap_drop_regexp }}"
+
+    - name: "Restart pihole lxc container"
+      ansible.builtin.raw: "pct reboot {{ vmid }}"
+      when: "lxc_config.changed"
+  delegate_to: "{{ proxmox_node }}"

@@ -1,0 +1,21 @@
+- name: "Deploy pihole"
+  hosts: "dns"
+  gather_facts: false
+  remote_user: "root"
+
+  vars_files:
+    - "vars.yml"
+
+  tasks:
+    - ansible.builtin.import_tasks: "deploy-tasks.yml"
+
+- name: "Deploy remaining services"
+  hosts: "services"
+  gather_facts: false
+  remote_user: "root"
+
+  vars_files:
+    - "vars.yml"
+
+  tasks:
+    - ansible.builtin.import_tasks: "deploy-tasks.yml"
