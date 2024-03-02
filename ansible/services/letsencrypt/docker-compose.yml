@@ -4,7 +4,6 @@ services:
   letsencrypt:
     container_name: "letsencrypt"
     image: "ghcr.io/alexzorin/certbot-dns-multi"
-    network_mode: host
 
     volumes:
       - "${PWD}/update_certificate.sh:/root/update_certificate.sh"
