@@ -1,0 +1,1 @@
+service_data_dir: "{{ services_data_dir }}/{{ ansible_hostname }}"

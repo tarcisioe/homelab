@@ -6,8 +6,7 @@
     path: "{{ item }}"
     state: "directory"
   loop:
-    - "{{ pihole_data_dir }}"
-    - "{{ pihole_data_dir }}/etc"
+    - "{{ service_data_dir }}"
     - "{{ dnsmasq_config_dir }}"
     - "{{ pihole_config_dir }}"
     - "{{ pihole_custom_hosts_dir }}"

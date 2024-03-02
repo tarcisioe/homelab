@@ -6,6 +6,9 @@
 - name: "Gather facts"
   ansible.builtin.gather_facts:
 
+- name: "Load service vars"
+  ansible.builtin.include_vars: "service-vars.yml"
+
 - name: "Upgrade Alpine packages"
   community.general.apk:
     upgrade: true

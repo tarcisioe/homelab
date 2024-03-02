@@ -8,8 +8,7 @@ setupVars_file: "{{ pihole_tf_generated_dir }}/setupVars.conf"
 service_hosts_file: "{{ pihole_tf_generated_dir }}/service-hosts"
 
 # remote paths
-pihole_data_dir: "{{ services_data_dir }}/pihole"
-dnsmasq_config_dir: "{{ pihole_data_dir }}/etc/dnsmasq.d"
-pihole_config_dir: "{{ pihole_data_dir }}/etc/pihole"
+dnsmasq_config_dir: "{{ service_data_dir }}/etc/dnsmasq.d"
+pihole_config_dir: "{{ service_data_dir }}/etc/pihole"
 pihole_custom_hosts_dir: "{{ pihole_config_dir }}/custom_hosts"
 webpassword_remote_file: "{{ compose_dir }}/webpassword"
