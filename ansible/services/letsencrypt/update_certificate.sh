@@ -1,23 +1,33 @@
 #!/bin/bash
 
+set -euo pipefail
+
+DOMAIN="{{ domain }}"
+CERTBOT_CONF_DIR="/etc/letsencrypt"
+DOMAIN_CERTS_DIR="${CERTBOT_CONF_DIR}/live/${DOMAIN}"
+
 
 function create-or-renew-certificate {
-    local certbot_conf_dir="/etc/letsencrypt"
-
-    [[ -f "${certbot_conf_dir}/live/{{ domain }}/fullchain.pem" ]] && {
+    [[ -f "${DOMAIN_CERTS_DIR}/fullchain.pem" ]] && {
         certbot renew
-        exit 0
+        return 0
     }
 
     certbot certonly -a dns-multi \
-        -c "${certbot_conf_dir}/certbot.ini" \
-        --dns-multi-credentials "${certbot_conf_dir}/dns-multi.ini" \
+        --dns-multi-credentials "${CERTBOT_CONF_DIR}/dns-multi.ini" \
         -d "*.{{ domain }}"
 }
 
 
+function ensure-certs-on-output {
+    echo "Copying certs to output"
+    cp "${DOMAIN_CERTS_DIR}"/* /certs
+}
+
+
 function main {
-    create-or-renew-certificate
+    create-or-renew-certificate &&
+    ensure-certs-on-output &&
     sleep 12h
 }
 

@@ -36,6 +36,7 @@
         state: "present"
   environment:
     PWD: "{{ compose_dir }}"
+    DATA_DIR: "{{ data_dir }}"
     SERVICE_DIR: "{{ services_data_dir }}/{{ ansible_hostname }}"
 
 - name: "Prune Docker data"

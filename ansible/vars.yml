@@ -4,6 +4,7 @@ tf_generated_dir: "../tf-generated"
 
 # remote paths
 compose_dir: "/container"
+data_dir: "/mnt/data"
 services_data_dir: "/mnt/data/services"
 
 # lxc configuration
