@@ -5,6 +5,5 @@ certbot_ini_file: "{{ letsencrypt_private_dir }}/cli.ini"
 update_certificate_file: "./update_certificate.sh"
 
 # remote paths
-letsencrypt_output_dir: "{{ data_dir }}/certs"
-letsencrypt_conf_dir: "{{ service_data_dir }}/etc/letsencrypt"
-letsencrypt_cli_ini_dir: "{{ letsencrypt_conf_dir }}/cli.ini.d"
+letsencrypt_config_dir: "{{ service_data_dir }}/etc/letsencrypt"
+letsencrypt_cli_ini_dir: "{{ letsencrypt_config_dir }}/cli.ini.d"

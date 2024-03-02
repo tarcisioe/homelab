@@ -6,9 +6,8 @@
     path: "{{ item }}"
     state: "directory"
   loop:
-    - "{{ letsencrypt_conf_dir }}"
+    - "{{ common_certs_dir }}"
     - "{{ letsencrypt_cli_ini_dir }}"
-    - "{{ letsencrypt_output_dir }}"
 
 - name: "Copy base cli.ini"
   ansible.builtin.copy:
@@ -23,13 +22,13 @@
 - name: "Merge files into a single custom.list"
   ansible.builtin.assemble:
     src: "{{ letsencrypt_cli_ini_dir }}"
-    dest: "{{ letsencrypt_conf_dir }}/cli.ini"
+    dest: "{{ letsencrypt_config_dir }}/cli.ini"
   register: "cli_ini"
 
 - name: "Copy dns-multi.ini"
   ansible.builtin.copy:
     src: "{{ dns_multi_ini_file }}"
-    dest: "{{ letsencrypt_conf_dir }}"
+    dest: "{{ letsencrypt_config_dir }}"
   register: "dns_multi_ini"
 
 - name: "Configure update_certificate.sh"

@@ -5,7 +5,8 @@ tf_generated_dir: "../tf-generated"
 # remote paths
 compose_dir: "/container"
 data_dir: "/mnt/data"
-services_data_dir: "/mnt/data/services"
+services_data_dir: "{{ data_dir }}/services"
+common_certs_dir: "{{ data_dir }}/certs"
 
 # lxc configuration
 lxc_config_path: "/etc/pve/lxc/{{ vmid }}.conf"

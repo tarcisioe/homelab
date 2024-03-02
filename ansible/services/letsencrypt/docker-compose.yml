@@ -8,8 +8,8 @@ services:
 
     volumes:
       - "${PWD}/update_certificate.sh:/root/update_certificate.sh"
-      - "${SERVICE_DIR}/etc/letsencrypt:/etc/letsencrypt"
-      - "${DATA_DIR}/certs:/certs"
+      - "{{ letsencrypt_config_dir }}:/etc/letsencrypt"
+      - "{{ common_certs_dir }}:/certs"
 
     entrypoint: ["/bin/bash", "-c"]
     command: "/root/update_certificate.sh"

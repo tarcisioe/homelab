@@ -11,8 +11,8 @@ services:
       WEBPASSWORD_FILE: "/run/secrets/webpassword"
 
     volumes:
-      - "$SERVICE_DIR/etc/pihole:/etc/pihole"
-      - "$SERVICE_DIR/etc/dnsmasq.d:/etc/dnsmasq.d"
+      - "{{ dnsmasq_config_dir }}:/etc/dnsmasq.d"
+      - "{{ pihole_config_dir }}:/etc/pihole"
 
     cap_add:
       - NET_ADMIN
