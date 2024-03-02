@@ -1,3 +1,32 @@
+- name: "Create virtual hosts for configuring containers"
+  gather_facts: false
+  hosts: "localhost"
+  remote_user: "root"
+
+  vars:
+    all_services: "{{ groups['dns'] + groups['services'] }}"
+
+  tasks:
+    - ansible.builtin.add_host:
+        name: "{{ item }}-config"
+        groups: "host_configs"
+        vmid: "{{ hostvars[item].vmid }}"
+        proxmox_node: "{{ hostvars[item].proxmox_node }}"
+      with_items: "{{ all_services }}"
+      changed_when: false
+
+- name: "Configure host containers"
+  gather_facts: false
+  hosts: "host_configs"
+  strategy: "free"
+  remote_user: "root"
+
+  vars_files:
+    - "lxc-vars.yml"
+
+  tasks:
+    - ansible.builtin.import_tasks: "configure-lxc-container.yml"
+
 - name: "Deploy pihole"
   hosts: "dns"
   gather_facts: false

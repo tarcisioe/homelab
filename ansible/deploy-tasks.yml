@@ -1,3 +1,2 @@
-- ansible.builtin.import_tasks: "configure-lxc-caps.yml"
 - ansible.builtin.import_tasks: "setup-container.yml"
 - ansible.builtin.import_tasks: "deploy-service.yml"

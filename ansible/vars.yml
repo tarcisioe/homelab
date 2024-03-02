@@ -7,11 +7,3 @@ compose_dir: "/container"
 data_dir: "/mnt/data"
 services_data_dir: "{{ data_dir }}/services"
 common_certs_dir: "{{ data_dir }}/certs"
-
-# lxc configuration
-lxc_config_path: "/etc/pve/lxc/{{ vmid }}.conf"
-lxc_caps: "mac_admin mac_override sys_time sys_module sys_rawio ipc_owner sys_nice sys_pacct sys_resource sys_tty_config syslog wake_alarm"
-lxc_cap_drop_bare: "lxc.cap.drop:"
-lxc_cap_drop_bare_regexp: "{{ lxc_cap_drop_bare | regex_escape() }}\\s*$"
-lxc_cap_drop_str: "{{ lxc_cap_drop_bare }} {{ lxc_caps }}"
-lxc_cap_drop_regexp: "^{{ lxc_cap_drop_str | regex_escape() }}\\s*$"
