@@ -1,1 +1,2 @@
 service_data_dir: "{{ services_data_dir }}/{{ ansible_hostname }}"
+service_nginx_dir: "{{ service_data_dir }}/etc/nginx"

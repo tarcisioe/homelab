@@ -48,7 +48,8 @@ locals {
     dns = { hostname = "pihole", specs = { vmid = 10053 }, network = { dns = "1.1.1.1" } }
 
     other_services = [
-        { hostname = "letsencrypt", specs = { disk_size = "2G" }, network = {} }
+        { hostname = "letsencrypt", specs = { disk_size = "2G" }, network = {} },
+        { hostname = "navidrome", specs = {}, network = {} },
     ]
 
     services = concat([local.dns], local.other_services)

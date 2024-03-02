@@ -1,0 +1,10 @@
+- name: "Ensure service /etc/nginx directory exists"
+  ansible.builtin.file:
+    path: "{{ service_nginx_dir }}"
+    state: "directory"
+
+- name: "Configure nginx.conf"
+  ansible.builtin.template:
+    src: "services/{{ ansible_hostname }}/nginx.conf"
+    dest: "{{ service_nginx_dir }}/nginx.conf"
+  register: "nginx_conf"
