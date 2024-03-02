@@ -1,6 +1,3 @@
-- name: "Import custom vars"
-  ansible.builtin.include_vars: "vars.yml"
-
 - name: "Ensure directories exist"
   file:
     path: "{{ item }}"

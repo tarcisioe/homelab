@@ -3,6 +3,17 @@
     path: "/container"
     state: "directory"
 
+- name: "Check if custom vars exist"
+  delegate_to: "localhost"
+  ansible.builtin.stat:
+    path: "services/{{ ansible_hostname }}/vars.yml"
+  register: "custom_vars"
+
+- name: "Include custom vars"
+  ansible.builtin.include_vars:
+    file: "services/{{ ansible_hostname }}/vars.yml"
+  when: "custom_vars.stat.exists"
+
 - name: "Check if custom tasks exist"
   delegate_to: "localhost"
   ansible.builtin.stat:

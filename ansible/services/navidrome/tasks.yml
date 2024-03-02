@@ -1,4 +1,3 @@
-- ansible.builtin.include_vars: "vars.yml"
 - ansible.builtin.include_tasks: "common/configure-nginx.yml"
 
 - name: "Set service to be redeployed"
