@@ -1,0 +1,1 @@
+pacoloco_config_dir: "{{ service_data_dir }}/etc/pacoloco"

@@ -1,0 +1,17 @@
+- name: "Ensure directories exist"
+  file:
+    path: "{{ item }}"
+    state: "directory"
+  loop:
+    - "{{ pacoloco_config_dir }}"
+
+- name: "Copy pacoloco configuration"
+  ansible.builtin.copy:
+    src: "pacoloco.yaml"
+    dest: "{{ pacoloco_config_dir }}/"
+  register: "pacoloco_config"
+
+- name: "Set service to be redeployed"
+  ansible.builtin.set_fact:
+    restart_docker: true
+  when: "pacoloco_config.changed"

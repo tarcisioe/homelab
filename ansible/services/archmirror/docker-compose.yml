@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+  pacoloco:
+    image: "ghcr.io/anatol/pacoloco"
+    ports:
+      - "80:9129"
+    volumes:
+      - "{{ service_data_dir }}/cache:/var/cache/pacoloco"
+      - "{{ pacoloco_config_dir }}/pacoloco.yaml:/etc/pacoloco.yaml"
+    restart: "unless-stopped"

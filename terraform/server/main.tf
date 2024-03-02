@@ -50,6 +50,7 @@ locals {
     other_services = [
         { hostname = "letsencrypt", specs = { disk_size = "2G" }, network = {} },
         { hostname = "navidrome", specs = {}, network = {} },
+        { hostname = "archmirror", specs = {}, network = {} },
     ]
 
     services = concat([local.dns], local.other_services)
