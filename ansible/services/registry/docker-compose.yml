@@ -1,0 +1,56 @@
+version: "3"
+
+services:
+  proxy:
+    image: "{{ nginx_image }}"
+    restart: "always"
+
+    volumes:
+      - "{{ service_data_dir }}/etc/nginx:/etc/nginx"
+      - "{{ common_certs_dir }}:/certs:ro"
+
+    ports:
+      - "80:80"
+      - "443:443"
+
+  registry_:
+    image: "{{ docker_registry_ui_image }}"
+    restart: "always"
+
+    environment:
+      - "SINGLE_REGISTRY=true"
+      - "REGISTRY_TITLE=Docker Registry UI"
+      - "DELETE_IMAGES=true"
+      - "SHOW_CONTENT_DIGEST=true"
+      - "NGINX_PROXY_PASS_URL=http://registry-backend:5000"
+      - "SHOW_CATALOG_NB_TAGS=true"
+      - "CATALOG_MIN_BRANCHES=1"
+      - "CATALOG_MAX_BRANCHES=1"
+      - "TAGLIST_PAGE_SIZE=100"
+      - "REGISTRY_SECURED=false"
+      - "CATALOG_ELEMENTS_LIMIT=1000"
+
+  registry-backend:
+    container_name: "local"
+
+    image: "{{ registry_image }}"
+    restart: "always"
+
+    volumes:
+      - "{{ service_data_dir }}/data:/var/lib/registry"
+
+  registry-cache:
+    container_name: "cache"
+
+    image: "{{ registry_image }}"
+    restart: "always"
+
+    volumes:
+      - "{{ service_data_dir }}/cache:/var/lib/registry"
+
+    environment:
+      REGISTRY_PROXY_REMOTEURL: "https://registry-1.docker.io"
+      {% if registry_auth.stat.exists -%}
+      REGISTRY_PROXY_USERNAME: "{{ registry_proxy_username }}"
+      REGISTRY_PROXY_PASSWORD: "{{ registry_proxy_password }}"
+      {% endif %}

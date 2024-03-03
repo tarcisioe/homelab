@@ -4,7 +4,7 @@
   remote_user: "root"
 
   vars:
-    all_services: "{{ groups['dns'] + groups['services'] }}"
+    all_services: "{{ groups['base_services'] + groups['services'] }}"
 
   tasks:
     - ansible.builtin.add_host:
@@ -27,13 +27,14 @@
   tasks:
     - ansible.builtin.import_tasks: "configure-lxc-container.yml"
 
-- name: "Deploy pihole"
-  hosts: "dns"
+- name: "Deploy base services"
+  hosts: "base_services"
   gather_facts: false
   remote_user: "root"
 
   vars_files:
     - "vars.yml"
+    - "service-images.yml"
 
   tasks:
     - ansible.builtin.import_tasks: "deploy-tasks.yml"
@@ -45,6 +46,7 @@
 
   vars_files:
     - "vars.yml"
+    - "service-images.yml"
 
   tasks:
     - ansible.builtin.import_tasks: "deploy-tasks.yml"

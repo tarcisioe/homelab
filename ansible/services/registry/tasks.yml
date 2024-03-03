@@ -1,0 +1,16 @@
+- name: "Check if registry auth file exists"
+  delegate_to: "localhost"
+  ansible.builtin.stat:
+    path: "{{ service_private_dir }}/auth-info.yml"
+  register: "registry_auth"
+
+- name: "Load private registry vars"
+  ansible.builtin.include_vars: "{{ service_private_dir }}/auth-info.yml"
+  when: "registry_auth.stat.exists"
+
+- ansible.builtin.include_tasks: "common/configure-nginx.yml"
+
+- name: "Set service to be redeployed"
+  ansible.builtin.set_fact:
+    restart_docker: true
+  when: "nginx_conf.changed"

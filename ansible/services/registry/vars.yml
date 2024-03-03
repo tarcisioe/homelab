@@ -1,0 +1,5 @@
+service_http_address: "registry_"
+service_http_port: 80
+
+registry_cache_http_address: "registry-cache"
+registry_cache_http_port: 5000

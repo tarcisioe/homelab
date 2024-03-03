@@ -1,7 +1,6 @@
 # local paths
-letsencrypt_private_dir: "{{ private_dir }}/letsencrypt"
-dns_multi_ini_file: "{{ letsencrypt_private_dir }}/dns-multi.ini"
-certbot_ini_file: "{{ letsencrypt_private_dir }}/cli.ini"
+dns_multi_ini_file: "{{ service_private_dir }}/dns-multi.ini"
+certbot_ini_file: "{{ service_private_dir }}/cli.ini"
 update_certificate_file: "./update_certificate.sh"
 
 # remote paths

@@ -45,15 +45,18 @@ locals {
         vmid = 0
     }
 
-    dns = { hostname = "pihole", specs = { vmid = 10053 }, network = { dns = "1.1.1.1" } }
+    base_services = { for s in [
+        { hostname = "pihole", specs = {}, network = { dns = "1.1.1.1" } },
+        { hostname = "registry", specs = {}, network = { dns = "1.1.1.1" } },
+    ]: s.hostname => s }
 
-    other_services = [
+    other_services = { for s in [
+        { hostname = "archmirror", specs = {}, network = {} },
         { hostname = "letsencrypt", specs = { disk_size = "2G" }, network = {} },
         { hostname = "navidrome", specs = {}, network = {} },
-        { hostname = "archmirror", specs = {}, network = {} },
-    ]
+    ]: s.hostname => s }
 
-    services = concat([local.dns], local.other_services)
+    services = concat(values(local.base_services), values(local.other_services))
 }
 
 module "service_containers" {
@@ -86,15 +89,15 @@ resource "local_file" "service_inventory" {
     content = templatefile(
         "templates/ansible-inventory.tftpl",
         {
+            base_services = [
+                for sc in module.service_containers.*:
+                sc if can(local.base_services[sc.container.hostname])
+            ]
             services = [
                 for sc in module.service_containers.*:
-                sc if sc.container.hostname != local.dns.hostname
+                sc if can(local.other_services[sc.container.hostname])
             ]
             proxmox = var.proxmox
-            dns = [
-                for sc in module.service_containers.*:
-                sc if sc.container.hostname == local.dns.hostname
-            ][0]
             network = var.network
         }
     )

@@ -22,11 +22,24 @@
   community.general.apk:
     name: "docker"
 
+- block:
+  - name: "Ensure there /etc/docker exists"
+    ansible.builtin.file:
+      path: "/etc/docker"
+      state: "directory"
+
+  - name: "Configure daemon.json"
+    ansible.builtin.template:
+      src: "{{ templates_dir }}/daemon.json"
+      dest: "/etc/docker/daemon.json"
+    register: "daemon_json"
+  when: "docker_registry_cache | default(false)"
+
 - name: "Enable and start Docker service"
   ansible.builtin.service:
     name: "docker"
     enabled: true
-    state: "started"
+    state: "{{ 'restarted' if daemon_json.changed else 'started' }}"
 
 - name: "Install Docker Python module"
   ansible.builtin.pip:
@@ -34,3 +47,20 @@
       - "docker<7.0.0"
       - "docker-compose"
     extra_args: "--no-build-isolation"
+
+- name: "Check if dockerhub-auth.yml exists"
+  delegate_to: "localhost"
+  ansible.builtin.stat:
+    path: "{{ private_dir }}/dockerhub-auth.yml"
+  register: "dockerhub_auth"
+
+- block:
+  - name: "Load Docker Hub authentication info."
+    ansible.builtin.include_vars: "{{ private_dir }}/dockerhub-auth.yml"
+
+  - name: "Login to Docker Hub"
+    community.docker.docker_login:
+      username: "{{ dockerhub_username }}"
+      password: "{{ dockerhub_password }}"
+      state: "present"
+  when: "dockerhub_auth.stat.exists"

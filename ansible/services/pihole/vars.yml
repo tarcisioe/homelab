@@ -1,8 +1,7 @@
 # local paths
-pihole_private_dir: "{{ private_dir }}/pihole"
-webpassword_file: "{{ pihole_private_dir }}/webpassword"
-static_hosts_file: "{{ pihole_private_dir }}/static-hosts"
-dhcp_assignments_file: "{{ pihole_private_dir }}/dhcp-assignments"
+webpassword_file: "{{ service_private_dir }}/webpassword"
+static_hosts_file: "{{ service_private_dir }}/static-hosts"
+dhcp_assignments_file: "{{ service_private_dir }}/dhcp-assignments"
 pihole_tf_generated_dir: "{{ tf_generated_dir }}/pihole"
 setupVars_file: "{{ pihole_tf_generated_dir }}/setupVars.conf"
 service_hosts_file: "{{ pihole_tf_generated_dir }}/service-hosts"

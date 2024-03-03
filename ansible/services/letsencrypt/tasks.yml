@@ -13,7 +13,7 @@
 
 - name: "Copy private cli.ini"
   ansible.builtin.copy:
-    src: "{{ letsencrypt_private_dir }}"
+    src: "{{ service_private_dir }}"
     dest: "{{ letsencrypt_cli_ini_dir}}/02-private.ini"
 
 - name: "Merge files into a single custom.list"

@@ -5,8 +5,13 @@ domain = ${ network.domain }
 [proxmox]
 ${ proxmox.node } ansible_host=${ proxmox.ip }
 
-[dns]
-${ dns.container.hostname } ansible_host=${ dns.container.ip } vmid=${ dns.container.vmid } proxmox_node=${ dns.container.node }
+[base_services]
+%{ for service in base_services ~}
+${ service.container.hostname } ansible_host=${ service.container.ip } vmid=${ service.container.vmid } proxmox_node=${ service.container.node  }
+%{ endfor ~}
+
+[services:vars]
+docker_registry_cache=true
 
 [services]
 %{ for service in services ~}

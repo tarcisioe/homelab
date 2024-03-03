@@ -1,6 +1,7 @@
 # local paths
 private_dir: "../private"
 tf_generated_dir: "../tf-generated"
+templates_dir: "common/templates"
 
 # remote paths
 compose_dir: "/container"
