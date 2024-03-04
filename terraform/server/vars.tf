@@ -27,6 +27,14 @@ variable "network" {
     })
 }
 
+variable "storage" {
+    type = object({
+        path = string,
+        mountpoint = string,
+        size = string,
+    })
+}
+
 variable "dhcp" {
     type = object({
         start = string,

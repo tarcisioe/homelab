@@ -7,6 +7,11 @@ variable "container" {
     type = object({
         hostname = string,
         ip = string,
+        storage = object({
+            path = string,
+            mountpoint = string,
+            size = string,
+        }),
     })
 }
 

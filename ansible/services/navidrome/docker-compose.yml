@@ -22,4 +22,4 @@ services:
 
     volumes:
       - "{{ service_data_dir }}/navidrome_data:/data"
-      - "/mnt/data/media/music:/music"
+      - "{{ container_data_dir }}/shared/music:/music"

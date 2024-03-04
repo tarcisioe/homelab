@@ -5,6 +5,5 @@ templates_dir: "common/templates"
 
 # remote paths
 compose_dir: "/container"
-data_dir: "/mnt/data"
-services_data_dir: "{{ data_dir }}/services"
-common_certs_dir: "{{ data_dir }}/certs"
+services_data_dir: "{{ container_data_dir }}/services"
+common_certs_dir: "{{ container_data_dir }}/certs"

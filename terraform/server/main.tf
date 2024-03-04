@@ -66,7 +66,12 @@ module "service_containers" {
     node = var.proxmox.node
     container = {
         hostname = local.services[count.index].hostname,
-        ip = "${split("/", cidrhost(var.network.services_subnet, count.index + 1))[0]}/${local.mask_size}"
+        ip = "${split("/", cidrhost(var.network.services_subnet, count.index + 1))[0]}/${local.mask_size}",
+        storage = {
+            path = var.storage.path,
+            mountpoint = var.storage.mountpoint,
+            size = var.storage.size,
+        },
     }
     specs = merge(local.default_specs, local.services[count.index].specs)
     secrets = local.default_secrets
@@ -99,6 +104,7 @@ resource "local_file" "service_inventory" {
             ]
             proxmox = var.proxmox
             network = var.network
+            storage = var.storage
         }
     )
     filename = "../../tf-generated/ansible-services-inventory.ini"

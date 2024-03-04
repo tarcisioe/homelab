@@ -38,10 +38,10 @@ resource "proxmox_lxc" "service_container" {
     mountpoint {
         slot = "0"
         key = 0
-        storage = "/mnt/data"
-        volume = "/mnt/data"
-        mp = "/mnt/data"
-        size = "2T"
+        storage = var.container.storage.path
+        volume = var.container.storage.path
+        mp = var.container.storage.mountpoint
+        size = var.container.storage.size
     }
 
     network {
