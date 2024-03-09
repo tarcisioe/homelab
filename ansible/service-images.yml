@@ -2,3 +2,11 @@ nginx_image: "nginx:1.25.4-alpine-slim"
 
 docker_registry_ui_image: "joxit/docker-registry-ui:2.5.7"
 registry_image: "registry:2.8.3"
+
+navidrome_image: "deluan/navidrome:0.51.1"
+
+pihole_image: "pihole/pihole:2024.02.2"
+
+pacoloco_image: "ghcr.io/anatol/pacoloco:1.6"
+
+certbot_dns_multi_image: "ghcr.io/alexzorin/certbot-dns-multi:4.15.0"

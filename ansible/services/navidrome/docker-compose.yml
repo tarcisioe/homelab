@@ -2,7 +2,7 @@ version: "3"
 
 services:
   proxy:
-    image: "nginx:mainline-alpine-slim"
+    image: "{{ nginx_image }}"
     restart: "always"
 
     volumes:
@@ -14,7 +14,7 @@ services:
       - "443:443"
 
   navidrome_:
-    image: "deluan/navidrome:latest"
+    image: "{{ navidrome_image }}"
     restart: "always"
 
     environment:

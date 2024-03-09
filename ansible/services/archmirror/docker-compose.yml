@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   pacoloco:
-    image: "ghcr.io/anatol/pacoloco"
+    image: "{{ pacoloco_image }}"
     ports:
       - "80:9129"
     volumes:

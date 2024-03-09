@@ -3,7 +3,7 @@ version: "3"
 services:
   letsencrypt:
     container_name: "letsencrypt"
-    image: "ghcr.io/alexzorin/certbot-dns-multi"
+    image: "{{ certbot_dns_multi_image }}"
 
     volumes:
       - "${PWD}/update_certificate.sh:/root/update_certificate.sh"
