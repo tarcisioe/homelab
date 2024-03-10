@@ -2,6 +2,7 @@
 private_dir: "../private"
 tf_generated_dir: "../tf-generated"
 templates_dir: "common/templates"
+common_nginx_conf: "{{ templates_dir }}/nginx.conf"
 
 # remote paths
 compose_dir: "/container"

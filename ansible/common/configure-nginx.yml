@@ -3,8 +3,14 @@
     path: "{{ service_nginx_dir }}"
     state: "directory"
 
+- name: "Check if there is a custom nginx.conf to configure."
+  delegate_to: "localhost"
+  ansible.builtin.stat:
+    path: "{{ service_custom_nginx_conf }}"
+  register: "custom_nginx_conf"
+
 - name: "Configure nginx.conf"
   ansible.builtin.template:
-    src: "services/{{ ansible_hostname }}/nginx.conf"
+    src: "{{ service_custom_nginx_conf if custom_nginx_conf.stat.exists else common_nginx_conf }}"
     dest: "{{ service_nginx_dir }}/nginx.conf"
   register: "nginx_conf"

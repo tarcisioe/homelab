@@ -1,0 +1,24 @@
+version: "3"
+services:
+  proxy:
+    image: "{{ nginx_image }}"
+    restart: "always"
+
+    volumes:
+      - "{{ service_data_dir }}/etc/nginx:/etc/nginx"
+      - "{{ common_certs_dir }}:/certs:ro"
+
+    ports:
+      - "80:80"
+      - "443:443"
+
+  jellyfin_:
+    image: "{{ jellyfin_image }}"
+    restart: "always"
+    ports:
+      - "7359:7359/udp"
+      - "1900:1900/udp"
+    volumes:
+      - "{{ service_data_dir }}/config:/config"
+      - "{{ container_data_dir }}/shared/series:/series"
+      - "{{ container_data_dir }}/shared/movies:/movies"

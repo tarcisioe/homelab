@@ -52,6 +52,7 @@ locals {
 
     other_services = { for s in [
         { hostname = "archmirror", specs = {}, network = {} },
+        { hostname = "jellyfin", specs = { disk_size = "2G" }, network = {} },
         { hostname = "letsencrypt", specs = { disk_size = "2G" }, network = {} },
         { hostname = "navidrome", specs = {}, network = {} },
     ]: s.hostname => s }

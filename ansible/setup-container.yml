@@ -23,7 +23,7 @@
     name: "docker"
 
 - block:
-  - name: "Ensure there /etc/docker exists"
+  - name: "Ensure that /etc/docker exists"
     ansible.builtin.file:
       path: "/etc/docker"
       state: "directory"

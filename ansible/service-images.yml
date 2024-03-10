@@ -10,3 +10,5 @@ pihole_image: "pihole/pihole:2024.02.2"
 pacoloco_image: "ghcr.io/anatol/pacoloco:1.6"
 
 certbot_dns_multi_image: "ghcr.io/alexzorin/certbot-dns-multi:4.15.0"
+
+jellyfin_image: "jellyfin/jellyfin:10.8.13-1"
