@@ -14,6 +14,17 @@
     file: "{{ service_custom_vars }}"
   when: "custom_vars.stat.exists"
 
+- name: "Check if subservices exist"
+  delegate_to: "localhost"
+  ansible.builtin.stat:
+    path: "{{ service_subservices }}"
+  register: "subservices_file"
+
+- name: "Include custom vars"
+  ansible.builtin.include_vars:
+    file: "{{ service_subservices }}"
+  when: "subservices_file.stat.exists"
+
 - name: "Check if custom tasks exist"
   delegate_to: "localhost"
   ansible.builtin.stat:

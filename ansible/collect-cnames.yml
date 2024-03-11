@@ -1,0 +1,16 @@
+- name: "Check if service has subservices."
+  ansible.builtin.stat:
+    path: "services/{{ item }}/subservices.yml"
+  register: "subservices_file"
+
+- block:
+  - ansible.builtin.include_vars: "service-vars.yml"
+  - ansible.builtin.include_vars: "services/{{ item }}/subservices.yml"
+
+  - name: "Create CNAME file for service {{ item }}."
+    ansible.builtin.template:
+      src: "{{ templates_dir }}/cnames"
+      dest: "{{ generated_cnames_dir }}/{{ item }}"
+    vars:
+      ansible_hostname: "{{ item }}"
+  when: "subservices_file.stat.exists"

@@ -1,6 +1,9 @@
 # local paths
 private_dir: "../private"
 tf_generated_dir: "../tf-generated"
+ansible_generated_dir: "../ansible-generated"
+generated_cnames_dir: "{{ ansible_generated_dir }}/cnames.d"
+generated_cnames_file: "{{ ansible_generated_dir }}/cnames"
 templates_dir: "common/templates"
 common_nginx_conf: "{{ templates_dir }}/nginx.conf"
 

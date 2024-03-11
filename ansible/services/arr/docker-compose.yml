@@ -1,0 +1,22 @@
+version: "3"
+services:
+  proxy:
+    image: "{{ nginx_image }}"
+    restart: "always"
+    volumes:
+      - "{{ service_data_dir }}/etc/nginx:/etc/nginx"
+      - "{{ common_certs_dir }}:/certs:ro"
+    ports:
+      - "80:80"
+      - "443:443"
+
+  {% for service in subservices -%}
+  {{ service.name }}_:
+    image: "{{ service.image }}"
+    restart: "always"
+    volumes:
+      {% for volume in service.volumes -%}
+      - "{{ volume }}"
+      {% endfor %}
+
+  {% endfor %}

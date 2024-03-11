@@ -1,0 +1,3 @@
+{% for service in subservices -%}
+cname={{ service.name }}.{{ domain }},{{ ansible_hostname }}.{{ domain }}
+{% endfor %}

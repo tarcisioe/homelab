@@ -1,5 +1,6 @@
 service_ansible_dir: "services/{{ ansible_hostname }}"
 service_custom_vars: "{{ service_ansible_dir }}/vars.yml"
+service_subservices: "{{ service_ansible_dir }}/subservices.yml"
 service_custom_tasks: "{{ service_ansible_dir }}/tasks.yml"
 service_custom_nginx_conf: "{{ service_ansible_dir }}/nginx.conf"
 service_data_dir: "{{ services_data_dir }}/{{ ansible_hostname }}"

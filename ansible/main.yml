@@ -6,6 +6,10 @@
   vars:
     all_services: "{{ groups['base_services'] + groups['services'] }}"
 
+  vars_files:
+    - "vars.yml"
+    - "service-images.yml"
+
   tasks:
     - ansible.builtin.add_host:
         name: "{{ item }}-config"
@@ -14,6 +18,19 @@
         proxmox_node: "{{ hostvars[item].proxmox_node }}"
       with_items: "{{ all_services }}"
       changed_when: false
+
+    - name: "Ensure generated cnames directory exists."
+      ansible.builtin.file:
+        path: "{{ generated_cnames_dir }}"
+        state: "directory"
+
+    - ansible.builtin.include_tasks: "collect-cnames.yml"
+      with_items: "{{ all_services }}"
+
+    - name: "Assemble CNAMEs file"
+      ansible.builtin.assemble:
+        src: "{{ generated_cnames_dir }}"
+        dest: "{{ ansible_generated_dir }}/cnames"
 
 - name: "Configure host containers"
   gather_facts: false

@@ -20,6 +20,12 @@
     dest: "{{ dnsmasq_config_dir }}/04-pihole-static-dhcp.conf"
   register: "dhcp_assignments"
 
+- name: "Copy CNAMEs file"
+  ansible.builtin.copy:
+    src: "{{ generated_cnames_file }}"
+    dest: "{{ dnsmasq_config_dir }}/05-pihole-custom-cname.conf"
+  register: "cnames"
+
 - name: "Ensure setupVars.conf is properly included"
   ansible.builtin.blockinfile:
     block: "{{ lookup('ansible.builtin.file', '{{ setupVars_file }}') }}"
@@ -46,4 +52,4 @@
 - name: "Set service to be redeployed"
   ansible.builtin.set_fact:
     restart_docker: true
-  when: "webpassword.changed or  dhcp_assignments.changed or setupVars.changed or custom_list.changed"
+  when: "webpassword.changed or dhcp_assignments.changed or cnames.changed or setupVars.changed or custom_list.changed"

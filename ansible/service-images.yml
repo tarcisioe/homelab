@@ -12,3 +12,9 @@ pacoloco_image: "ghcr.io/anatol/pacoloco:1.6"
 certbot_dns_multi_image: "ghcr.io/alexzorin/certbot-dns-multi:4.15.0"
 
 jellyfin_image: "jellyfin/jellyfin:10.8.13-1"
+
+sonarr_image: "ghcr.io/linuxserver/sonarr:4.0.2.1183-ls230"
+radarr_image: "ghcr.io/linuxserver/radarr:5.3.6.8612-ls207"
+lidarr_image: "ghcr.io/linuxserver/lidarr:2.1.7.4030-ls158"
+bazarr_image: "ghcr.io/linuxserver/bazarr:v1.4.2-ls241"
+prowlarr_image: "ghcr.io/linuxserver/prowlarr:1.13.3.4273-ls55"

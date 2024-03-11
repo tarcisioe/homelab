@@ -55,6 +55,7 @@ locals {
         { hostname = "jellyfin", specs = { disk_size = "2G" }, network = {} },
         { hostname = "letsencrypt", specs = { disk_size = "2G" }, network = {} },
         { hostname = "navidrome", specs = {}, network = {} },
+        { hostname = "arr", specs = { disk_size = "2G" }, network = {} },
     ]: s.hostname => s }
 
     services = concat(values(local.base_services), values(local.other_services))
