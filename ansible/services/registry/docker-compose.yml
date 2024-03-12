@@ -39,6 +39,9 @@ services:
     volumes:
       - "{{ service_data_dir }}/data:/var/lib/registry"
 
+    environment:
+      REGISTRY_HTTP_HOST: "https://registry.{{ domain }}:443"
+
   registry-cache:
     container_name: "cache"
 
