@@ -14,6 +14,9 @@ services:
   {{ service.name }}_:
     image: "{{ service.image }}"
     restart: "always"
+    environment:
+      - "PUID=0"
+      - "GUID=0"
     volumes:
       {% for volume in service.volumes -%}
       - "{{ volume }}"

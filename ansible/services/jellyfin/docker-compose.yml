@@ -20,5 +20,5 @@ services:
       - "1900:1900/udp"
     volumes:
       - "{{ service_data_dir }}/config:/config"
-      - "{{ container_data_dir }}/shared/series:/series"
-      - "{{ container_data_dir }}/shared/movies:/movies"
+      - "{{ container_data_dir }}/shared/series:/series:ro"
+      - "{{ container_data_dir }}/shared/movies:/movies:ro"

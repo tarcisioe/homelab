@@ -3,8 +3,9 @@ subservices:
     image: "{{ sonarr_image }}"
     port: 8989
     volumes:
-      - "{{ service_data_dir }}/etc/nginx:/etc/nginx"
-      - "{{ common_certs_dir }}:/certs:ro"
+      - "{{ service_data_dir }}/sonarr:/config"
+      - "{{ container_data_dir }}/shared/series:/series"
+      - "{{ container_data_dir }}/shared/downloads:/downloads"
   - name: "radarr"
     image: "{{ radarr_image }}"
     port: 7878
