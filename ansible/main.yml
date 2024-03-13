@@ -1,7 +1,6 @@
 - name: "Create virtual hosts for configuring containers"
   gather_facts: false
   hosts: "localhost"
-  remote_user: "root"
 
   vars:
     all_services: "{{ groups['base_services'] + groups['services'] }}"
@@ -31,6 +30,27 @@
       ansible.builtin.assemble:
         src: "{{ generated_cnames_dir }}"
         dest: "{{ ansible_generated_dir }}/cnames"
+
+- name: "Setup Proxmox"
+  hosts: "proxmox"
+  remote_user: "root"
+
+  vars_files:
+    - "vars.yml"
+
+  tasks:
+    - name: "Ensure shared user exists"
+      ansible.builtin.user:
+        name: "{{ shared_user }}"
+        uid: "{{ shared_user_uid }}"
+
+    - name: "Ensure shared directory is owned by the shared user"
+      ansible.builtin.file:
+        path: "{{ server_shared_dir }}"
+        state: "directory"
+        owner: "{{ shared_user }}"
+        group: "{{ shared_user }}"
+        recurse: true
 
 - name: "Configure host containers"
   gather_facts: false

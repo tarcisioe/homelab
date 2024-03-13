@@ -16,10 +16,11 @@ services:
   navidrome_:
     image: "{{ navidrome_image }}"
     restart: "always"
+    user: "{{ service_uid }}:{{ service_uid }}"
 
     environment:
       ND_SCANSCHEDULE: "1h"
 
     volumes:
       - "{{ service_data_dir }}/navidrome_data:/data"
-      - "{{ container_data_dir }}/shared/music:/music"
+      - "{{ container_data_dir }}/shared/music:/music:ro"

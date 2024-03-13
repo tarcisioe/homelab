@@ -18,3 +18,5 @@ radarr_image: "ghcr.io/linuxserver/radarr:5.3.6.8612-ls207"
 lidarr_image: "ghcr.io/linuxserver/lidarr:2.1.7.4030-ls158"
 bazarr_image: "ghcr.io/linuxserver/bazarr:v1.4.2-ls241"
 prowlarr_image: "ghcr.io/linuxserver/prowlarr:1.13.3.4273-ls55"
+
+nfs_server_image: "registry.{{ domain }}/docker-nfs-server:20240312"

@@ -8,6 +8,9 @@ templates_dir: "common/templates"
 common_nginx_conf: "{{ templates_dir }}/nginx.conf"
 
 # remote paths
+shared_user: "shared"
+shared_user_uid: 9999
+server_shared_dir: "/mnt/data/shared"
 compose_dir: "/container"
 services_data_dir: "{{ container_data_dir }}/services"
 common_certs_dir: "{{ container_data_dir }}/certs"

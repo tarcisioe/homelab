@@ -1,3 +1,2 @@
-service_http_port: 4533
 service_user: "{{ shared_user }}"
 service_uid: "{{ shared_user_uid }}"

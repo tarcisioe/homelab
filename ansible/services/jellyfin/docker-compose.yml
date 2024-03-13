@@ -15,6 +15,7 @@ services:
   jellyfin_:
     image: "{{ jellyfin_image }}"
     restart: "always"
+    user: "{{ service_uid }}:{{ service_uid }}"
     ports:
       - "7359:7359/udp"
       - "1900:1900/udp"
