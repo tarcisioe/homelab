@@ -1,0 +1,1 @@
+/nfs/shared *(rw,sync,root_squash,all_squash,no_subtree_check,fsid=0,anonuid={{ shared_user_uid }},anongid={{ shared_user_uid }})

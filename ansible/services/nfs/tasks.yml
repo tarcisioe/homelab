@@ -1,0 +1,15 @@
+- name: "Ensure nfs configuration directory exists"
+  file:
+    path: "{{ service_data_dir }}/etc"
+    state: "directory"
+
+- name: "Copy exports file"
+  ansible.builtin.template:
+    src: "exports"
+    dest: "{{ service_data_dir }}/etc/exports"
+  register: "exports"
+
+- name: "Set service to be redeployed"
+  ansible.builtin.set_fact:
+    restart_docker: true
+  when: "exports.changed"
