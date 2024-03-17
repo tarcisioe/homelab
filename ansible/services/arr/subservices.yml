@@ -5,6 +5,7 @@ subservices:
     volumes:
       - "{{ service_data_dir }}/sonarr:/config"
       - "{{ container_data_dir }}/shared/series:/series"
+      - "{{ container_data_dir }}/shared/unsorted/series:/unsorted"
       - "{{ container_data_dir }}/shared/downloads:/downloads"
   - name: "radarr"
     image: "{{ radarr_image }}"
@@ -12,6 +13,7 @@ subservices:
     volumes:
       - "{{ service_data_dir }}/radarr:/config"
       - "{{ container_data_dir }}/shared/movies:/movies"
+      - "{{ container_data_dir }}/shared/unsorted/movies:/unsorted"
       - "{{ container_data_dir }}/shared/downloads:/downloads"
   - name: "lidarr"
     image: "{{ lidarr_image }}"
