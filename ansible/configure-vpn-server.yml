@@ -1,0 +1,87 @@
+- name: "Configure vpn server"
+  hosts: "vpn"
+  gather_facts: true
+  remote_user: "root"
+
+  vars_files:
+    - "vars.yml"
+
+  tasks:
+  - name: "Make sure the server has openvpn"
+    community.general.pacman:
+      name: "openvpn"
+      state: "present"
+    ignore_errors: true
+    register: "openvpn_install"
+
+  - name: "Upgrade packages"
+    community.general.pacman:
+      update_cache: true
+      upgrade: true
+    when: "openvpn_install.failed"
+    register: "upgrade_packages"
+
+  - name: "Retry installing openvpn"
+    community.general.pacman:
+      name: "openvpn"
+      state: "present"
+    when: "upgrade_packages.changed"
+
+  - name: "Disable SSH password authentication"
+    lineinfile:
+      path: "/etc/ssh/sshd_config"
+      regexp: '^#?PasswordAuthentication yes'
+      line: 'PasswordAuthentication no'
+    register: "sshd_config"
+
+  - name: "Disable SSH password authentication"
+    lineinfile:
+      path: "/etc/ssh/sshd_config.d/50-cloud-init.conf"
+      regexp: '^#?PasswordAuthentication yes'
+      line: 'PasswordAuthentication no'
+    register: "sshd_cloud_init_config"
+
+  - name: "Restart sshd"
+    ansible.builtin.systemd_service:
+      name: "sshd"
+      state: "restarted"
+    when: "sshd_config.changed or sshd_cloud_init_config.changed"
+
+  - name: "Ensure ccd directory exists"
+    ansible.builtin.file:
+      path: "/etc/openvpn/server/ccd"
+      owner: "openvpn"
+      group: "network"
+      mode: "600"
+      recurse: true
+      state: "directory"
+
+  - name: "Copy openvpn server configuration"
+    ansible.builtin.template:
+      src: "{{ templates_dir }}/server.ovpn"
+      dest: "/etc/openvpn/server/{{ vpn_address }}.conf"
+      owner: "openvpn"
+      group: "network"
+      mode: "600"
+    vars:
+      ca_crt: "{{ lookup('file', [private_dir, 'vpn/ca.crt'] | path_join) }}"
+      server_crt: "{{ lookup('file', [private_dir, 'vpn/server.crt'] | path_join) }}"
+      server_key: "{{ lookup('file', [private_dir, 'vpn/server.key'] | path_join) }}"
+      dh_pem: "{{ lookup('file', [private_dir, 'vpn/dh.pem'] | path_join) }}"
+      ta_key: "{{ lookup('file', [private_dir, 'vpn/ta.key'] | path_join) }}"
+    register: "openvpn_config"
+
+  - name: "Copy openvpn router config to ccd"
+    ansible.builtin.template:
+      src: "{{ templates_dir }}/ccd-router"
+      dest: "/etc/openvpn/server/ccd/router.{{ domain }}"
+      owner: "openvpn"
+      group: "network"
+      mode: "600"
+    register: "openvpn_ccd"
+
+    # - name: "Restart openvpn"
+    #   ansible.builtin.systemd_service:
+    #     name: "openvpn-server@{{ vpn_address }}"
+    #     state: "restarted"
+    #   when: "openvpn_config.changed or openvpn_ccd.changed"

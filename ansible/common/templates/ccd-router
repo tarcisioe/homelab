@@ -1,0 +1,1 @@
+iroute {{ subnet_ip }} {{ subnet_mask }}

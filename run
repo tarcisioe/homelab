@@ -49,8 +49,8 @@ function run-terraform {
 
 
 function run-ansible {
+    local playbook="${1}"
     local tf_generated="${BASE_DIR}/tf-generated"
-    local playbook="${BASE_DIR}/ansible/main.yml"
 
     [[ -d "${tf_generated}" ]] ||
         die "No 'tf-generated' directory found. Run terraform first."
@@ -58,6 +58,9 @@ function run-ansible {
     ansible-playbook -i "${tf_generated}/ansible-services-inventory.ini" "${playbook}" "${@}"
 }
 
+function run-homelab-ansible {
+    run-ansible "${BASE_DIR}/ansible/main.yml" "${@}"
+}
 
 function terraform-apply {
     local quiet_flag="${1}"
@@ -78,15 +81,17 @@ function run-command {
     local command="${2}"
 
     case "${command}" in
-        terraform)
+        homelab-terraform)
             terraform-apply "${quiet_flag}" ;;
-        ansible)
-            run-ansible "${@:3}" ;;
-        destroy)
+        homelab-ansible)
+            run-homelab-ansible "${@:3}" ;;
+        vpn-ansible)
+            run-ansible "${BASE_DIR}/ansible/configure-vpn-server.yml" "${@:3}" ;;
+        homelab-destroy)
             terraform-destroy "${quiet_flag}" ;;
-        full)
+        homelab-full)
             terraform-apply "${quiet_flag}" &&
-            run-ansible
+            run-homelab-ansible
             ;;
         *)
             die "No command '${command}'."
