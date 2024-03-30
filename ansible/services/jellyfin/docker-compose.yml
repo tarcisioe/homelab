@@ -23,3 +23,4 @@ services:
       - "{{ service_data_dir }}/config:/config"
       - "{{ container_data_dir }}/shared/series:/series:ro"
       - "{{ container_data_dir }}/shared/movies:/movies:ro"
+      - "{{ container_data_dir }}/shared/music:/music:ro"
