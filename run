@@ -11,10 +11,11 @@ Usage: run [OPTION...] COMMAND
 Execute commands for deploying the homelab.
 
 Commands:
-    terraform    Run terraform to create the containers.
-    ansible      Run ansible on the containers created by terraform.
-    destroy      Destroy the whole infrastructure.
-    full         Run terraform followed by ansible.
+    homelab-terraform    Run terraform to create the containers.
+    homelab-ansible      Run ansible on the containers created by terraform.
+    homelab-destroy      Destroy the whole infrastructure.
+    homelab-full         Run terraform followed by ansible.
+    vpn-ansible          Run ansible to configure the VPN server.
 
 Optional arguments:
     -y/--yes     Do not ask for interactive confirmation.
@@ -55,7 +56,7 @@ function run-ansible {
     [[ -d "${tf_generated}" ]] ||
         die "No 'tf-generated' directory found. Run terraform first."
 
-    ansible-playbook -i "${tf_generated}/ansible-services-inventory.ini" "${playbook}" "${@}"
+    ansible-playbook -i "${tf_generated}/ansible-services-inventory.ini" "${playbook}" "${@:2}"
 }
 
 function run-homelab-ansible {
@@ -85,14 +86,14 @@ function run-command {
             terraform-apply "${quiet_flag}" ;;
         homelab-ansible)
             run-homelab-ansible "${@:3}" ;;
-        vpn-ansible)
-            run-ansible "${BASE_DIR}/ansible/configure-vpn-server.yml" "${@:3}" ;;
         homelab-destroy)
             terraform-destroy "${quiet_flag}" ;;
         homelab-full)
             terraform-apply "${quiet_flag}" &&
             run-homelab-ansible
             ;;
+        vpn-ansible)
+            run-ansible "${BASE_DIR}/ansible/configure-vpn-server.yml" "${@:3}" ;;
         *)
             die "No command '${command}'."
             ;;

@@ -52,8 +52,7 @@
       path: "/etc/openvpn/server/ccd"
       owner: "openvpn"
       group: "network"
-      mode: "600"
-      recurse: true
+      mode: "750"
       state: "directory"
 
   - name: "Copy openvpn server configuration"
@@ -80,8 +79,8 @@
       mode: "600"
     register: "openvpn_ccd"
 
-    # - name: "Restart openvpn"
-    #   ansible.builtin.systemd_service:
-    #     name: "openvpn-server@{{ vpn_address }}"
-    #     state: "restarted"
-    #   when: "openvpn_config.changed or openvpn_ccd.changed"
+  - name: "Restart openvpn"
+    ansible.builtin.systemd_service:
+      name: "openvpn-server@{{ vpn_address }}"
+      state: "restarted"
+    when: "openvpn_config.changed or openvpn_ccd.changed"
