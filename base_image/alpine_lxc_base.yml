@@ -1,0 +1,54 @@
+image:
+  distribution: "alpine"
+  release: "3.19"
+  name: "Alpine Custom"
+  description: "Base alpine container for my homelab services."
+
+source:
+  downloader: "alpinelinux-http"
+  url: "http://dl-cdn.alpinelinux.org/alpine/"
+  keys:
+    - "0482D84022F52DF1C4E7CD43293ACD0907D9495A"
+  keyserver: "keyserver.ubuntu.com"
+
+packages:
+  manager: "apk"
+
+  sets:
+  - packages:
+    - "alpine-base"
+    - "logrotate"
+    - "docker"
+    - "openssh"
+    - "python3"
+    - "py3-pip"
+    - "py3-wheel"
+    action: "install"
+
+actions:
+- trigger: "post-packages"
+  action: |-
+    #!/bin/sh
+    set -eux
+
+    rm -rf /var/cache/apk/*
+    rm -rf /root/.cache
+
+    pip3 install --break-system-packages 'docker<7.0' 'docker-compose==1.29' 'PyYaml<5.4'
+
+    for svc_name in \
+        bootmisc \
+        devfs \
+        syslog
+    do
+        ln -fs /etc/init.d/"${svc_name}" /etc/runlevels/boot/"${svc_name}"
+    done
+
+    for svc_name in \
+        crond \
+        docker \
+        networking \
+        sshd
+    do
+        ln -s /etc/init.d/"${svc_name}" /etc/runlevels/default/"${svc_name}"
+    done

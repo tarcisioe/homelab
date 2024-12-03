@@ -3,3 +3,4 @@
 /tf-generated/
 /ansible-generated/
 /private/
+/base_image/image/*.tar.xz

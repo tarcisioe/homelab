@@ -66,7 +66,6 @@
 
 - name: "Deploy base services"
   hosts: "base_services"
-  gather_facts: false
   remote_user: "root"
 
   vars_files:
@@ -78,7 +77,6 @@
 
 - name: "Deploy remaining services"
   hosts: "services"
-  gather_facts: false
   remote_user: "root"
 
   vars_files:

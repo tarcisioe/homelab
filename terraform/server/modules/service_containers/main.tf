@@ -14,7 +14,7 @@ resource "proxmox_lxc" "service_container" {
     password = var.secrets.root_password
     ssh_public_keys = "${file(var.secrets.ssh_pub_key)}"
 
-    ostemplate = "local:vztmpl/alpine-3.18-ssh_20240225_amd64.tar.xz"
+    ostemplate = "local:vztmpl/alpine-3.19-homelab_20240330_amd64.tar.xz"
 
     start = true
     onboot = true

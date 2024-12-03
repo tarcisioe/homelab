@@ -1,26 +1,5 @@
-- name: "Install Python interpreter"
-  ansible.builtin.script:
-    cmd: "./scripts/install-python.sh"
-    creates: "/usr/bin/python"
-
-- name: "Gather facts"
-  ansible.builtin.gather_facts:
-
 - name: "Load service vars"
   ansible.builtin.include_vars: "service-vars.yml"
-
-- name: "Upgrade Alpine packages"
-  community.general.apk:
-    upgrade: true
-    update_cache: true
-
-- name: "Install Python packaging tools"
-  community.general.apk:
-    name: "py3-pip,py3-wheel"
-
-- name: "Install Docker and Docker Compose"
-  community.general.apk:
-    name: "docker"
 
 - block:
   - name: "Ensure that /etc/docker exists"
@@ -40,13 +19,6 @@
     name: "docker"
     enabled: true
     state: "{{ 'restarted' if daemon_json.changed else 'started' }}"
-
-- name: "Install Docker Python module"
-  ansible.builtin.pip:
-    name:
-      - "docker<7.0.0"
-      - "docker-compose"
-    extra_args: "--no-build-isolation"
 
 - name: "Check if dockerhub-auth.yml exists"
   delegate_to: "localhost"
