@@ -55,6 +55,7 @@
   ansible.builtin.template:
     src: "services/{{ ansible_hostname }}/docker-compose.yml"
     dest: "/container/docker-compose.yml"
+  register: "compose_file"
 
 - name: "Bring service up"
   block:
@@ -62,7 +63,14 @@
       community.docker.docker_compose_v2:
         project_src: "/container"
         state: "absent"
-      when: "restart_docker | default(false)"
+      when: "(restart_docker | default(false)) or compose_file.changed"
+
+    - name: "Prune images"
+      community.docker.docker_prune:
+        images: true
+        images_filters:
+          dangling: false
+      # when: "compose_file.changed"
 
     - name: "Start service"
       community.docker.docker_compose_v2:
