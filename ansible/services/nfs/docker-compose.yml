@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   nfs_server:
     image: "{{ nfs_server_image }}"
