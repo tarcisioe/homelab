@@ -35,6 +35,5 @@ variable "specs" {
         memory = number,
         disk_size = string,
         swap = number,
-        vmid = number,
     })
 }

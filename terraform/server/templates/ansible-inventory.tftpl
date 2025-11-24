@@ -16,7 +16,7 @@ ${ service.container.hostname } ansible_host=${ service.container.ip } vmid=${ s
 %{ endfor ~}
 
 [services:vars]
-docker_registry_cache=true
+docker_registry_cache=True
 
 [services]
 %{ for service in services ~}

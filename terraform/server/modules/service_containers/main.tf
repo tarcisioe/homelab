@@ -2,7 +2,7 @@ terraform {
   required_providers {
     proxmox = {
       source  = "telmate/proxmox"
-      version = "2.9.14"
+      version = "3.0.2-rc05"
     }
   }
 }
@@ -14,7 +14,7 @@ resource "proxmox_lxc" "service_container" {
     password = var.secrets.root_password
     ssh_public_keys = "${file(var.secrets.ssh_pub_key)}"
 
-    ostemplate = "local:vztmpl/alpine-3.20-homelab_20241203_amd64.tar.xz"
+    ostemplate = "local:vztmpl/alpine-3.22.2-homelab_20251124_amd64.tar.xz"
 
     start = true
     onboot = true
@@ -23,8 +23,6 @@ resource "proxmox_lxc" "service_container" {
     cores = var.specs.cores
     memory = var.specs.memory
     swap = var.specs.swap
-
-    vmid = var.specs.vmid
 
     features {
         nesting = true
