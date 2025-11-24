@@ -53,7 +53,7 @@
 
 - name: "Copy compose file"
   ansible.builtin.template:
-    src: "services/{{ ansible_hostname }}/docker-compose.yml"
+    src: "services/{{ inventory_hostname }}/docker-compose.yml"
     dest: "/container/docker-compose.yml"
   register: "compose_file"
 
@@ -70,7 +70,7 @@
         images: true
         images_filters:
           dangling: false
-      # when: "compose_file.changed"
+      when: "compose_file.changed"
 
     - name: "Start service"
       community.docker.docker_compose_v2:

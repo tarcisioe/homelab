@@ -1,22 +1,22 @@
-nginx_image: "nginx:1.27.3-alpine-slim"
+nginx_image: "nginx:1.29.3-alpine-slim"
 
 docker_registry_ui_image: "joxit/docker-registry-ui:2.5.7"
-registry_image: "registry:2.8.3"
+registry_image: "registry:3.0.0"
 
-navidrome_image: "deluan/navidrome:0.53.3"
+navidrome_image: "deluan/navidrome:0.58.5"
 
-pihole_image: "pihole/pihole:2024.07.0"
+pihole_image: "pihole/pihole:2025.11.0"
 
 pacoloco_image: "ghcr.io/anatol/pacoloco:1.7"
 
-certbot_dns_multi_image: "ghcr.io/alexzorin/certbot-dns-multi:4.20.4"
+certbot_dns_multi_image: "ghcr.io/alexzorin/certbot-dns-multi:4.27.0"
 
-jellyfin_image: "jellyfin/jellyfin:10.10.3"
+jellyfin_image: "jellyfin/jellyfin:10.11.3"
 
-sonarr_image: "ghcr.io/linuxserver/sonarr:4.0.11.2680-ls260"
-radarr_image: "ghcr.io/linuxserver/radarr:5.15.1.9463-ls247"
-lidarr_image: "ghcr.io/linuxserver/lidarr:2.7.1.4417-ls18"
-bazarr_image: "ghcr.io/linuxserver/bazarr:v1.4.5-ls280"
-prowlarr_image: "ghcr.io/linuxserver/prowlarr:1.27.0.4852-ls93"
+sonarr_image: "ghcr.io/linuxserver/sonarr:4.0.16.2944-ls298"
+radarr_image: "ghcr.io/linuxserver/radarr:6.0.4.10291-ls287"
+lidarr_image: "ghcr.io/linuxserver/lidarr:3.1.0.4875-ls11"
+bazarr_image: "ghcr.io/linuxserver/bazarr:v1.5.3-ls324"
+prowlarr_image: "ghcr.io/linuxserver/prowlarr:2.3.0.5236-ls132"
 
 nfs_server_image: "registry.{{ domain }}/docker-nfs-server:20240312"

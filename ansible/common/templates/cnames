@@ -1,3 +1,3 @@
 {% for service in subservices -%}
-cname={{ service.name }}.{{ domain }},{{ ansible_hostname }}.{{ domain }}
+cname={{ service.name }}.{{ domain }},{{ inventory_hostname }}.{{ domain }}
 {% endfor %}

@@ -1,5 +1,15 @@
 - ansible.builtin.include_tasks: "common/configure-nginx.yml"
 
+- name: "Ensure jellyfin dir exists"
+  file:
+    path: "{{ item }}"
+    state: "directory"
+    owner: "{{ service_user }}"
+    group: "{{ service_user }}"
+  loop:
+    - "{{ service_data_dir }}/config"
+    - "{{ service_data_dir }}/cache"
+
 - name: "Set service to be redeployed"
   ansible.builtin.set_fact:
     restart_docker: true
