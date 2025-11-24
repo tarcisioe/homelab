@@ -1,6 +1,6 @@
 image:
   distribution: "alpine"
-  release: "3.20"
+  release: "3.22.2"
   name: "Alpine Custom"
   description: "Base alpine container for my homelab services."
 
